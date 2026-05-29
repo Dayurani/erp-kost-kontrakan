@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ERP Kost & Kontrakan</title>
+  <meta name="description" content="Sistem ERP kosan untuk manajemen kamar, penghuni, pembayaran bulanan, dan invoice." />
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --surface-strong: #f2f7ff;
+      --text: #172a45;
+      --muted: #62718c;
+      --primary: #2c7cfa;
+      --accent: #ff7a59;
+      --success: #34c38f;
+      --warning: #f1b44c;
+      --danger: #f46a6a;
+      --border: rgba(100, 116, 139, 0.15);
+      --radius: 24px;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #eef5ff 0%, #f6f8fb 100%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 18px 48px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: radial-gradient(circle, rgba(44,124,250,1) 0%, rgba(67,200,250,1) 100%);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title strong {
+      font-size: 1.1rem;
+    }
+
+    .top-action {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .button,
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.85rem 1.35rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .button:hover,
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary,
+    .button.primary:focus {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 16px 40px rgba(44,124,250,0.18);
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 12px 30px rgba(17,24,39,0.06);
+    }
+
+    .hero {
+      display: grid;
+      gap: 24px;
+      padding: 32px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(44,124,250,0.14), rgba(255,255,255,0.96));
+      border: 1px solid rgba(44,124,250,0.12);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      max-width: 780px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 18px 40px rgba(31,45,61,0.05);
+    }
+
+    .card h2 {
+      margin: 0 0 0.85rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-top: 0.6rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 1rem 1.3rem;
+      border-bottom: 1px solid rgba(100, 116, 139, 0.14);
+      background: rgba(255,255,255,0.82);
+    }
+
+    .panel-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .panel-body {
+      padding: 1rem 1.3rem 1.4rem;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      background: transparent;
+      border: none;
+      padding: 1rem 0.9rem;
+      cursor: pointer;
+      color: var(--muted);
+      font-weight: 600;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .table {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      min-width: 100%;
+    }
+
+    .table th,
+    .table td {
+      text-align: left;
+      padding: 0.95rem 0.9rem;
+      border-bottom: 1px solid rgba(100, 116, 139, 0.10);
+    }
+
+    .table th {
+      font-size: 0.84rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge.free { background: rgba(52,195,143,0.14); color: #147a57; }
+    .badge.occupied { background: rgba(244,106,106,0.15); color: #a32626; }
+    .badge.due { background: rgba(241,180,76,0.16); color: #7d5a16; }
+    .badge.paid { background: rgba(44,124,250,0.14); color: #0f4bb8; }
+
+    .small-text {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .input-group {
+      display: grid;
+      gap: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(100, 116, 139, 0.18);
+      padding: 0.95rem 1rem;
+      font-size: 1rem;
+      background: white;
+      color: var(--text);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: rgba(44,124,250,0.45);
+      box-shadow: 0 0 0 3px rgba(44,124,250,0.12);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .marketing {
+      padding: 1.8rem;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
+      border: 1px solid rgba(44,124,250,0.12);
+      margin-top: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .marketing h2 {
+      margin: 0;
+    }
+
+    .marketing p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 0.75rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .feature-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      margin-top: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .invoice-box {
+      padding: 1.25rem;
+      border-radius: 20px;
+      background: #f8fbff;
+      border: 1px dashed rgba(44,124,250,0.25);
+      margin-top: 1rem;
+      overflow-x: auto;
+    }
+
+    .invoice-box pre {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    footer {
+      margin-top: 42px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(100, 116, 139, 0.12);
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero,
+      .panel,
+      .card {
+        padding: 1.25rem;
+      }
+
+      header {
+        padding-bottom: 10px;
+      }
+
+      .tabs {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="brand" href="#">
+        <div class="brand-logo">K</div>
+        <div class="brand-title">
+          <strong>ERP KOST</strong>
+          <span>Manajemen Kosan & Kontrakan</span>
+        </div>
+      </a>
+      <div class="top-action">
+        <button class="button primary" onclick="activateTab('rooms')">Data Kamar</button>
+        <button class="button secondary" onclick="activateTab('residents')">Penghuni</button>
+        <button class="button secondary" onclick="activateTab('payments')">Pembayaran</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>ERP Kosan Lengkap untuk Marketing, Finance, dan Operasional</h1>
+        <p>Kelola data kamar, pantau status kosong/isi, rekam penghuni, kelola tagihan bulanan, dan buat invoice profesional tanpa coding. Cocok untuk pemilik kos, kontrakan, atau manajemen properti kecil.</p>
+      </div>
+      <div class="hero-actions">
+        <button class="button primary" onclick="openForm('newRoom')">Tambah Kamar</button>
+        <button class="button secondary" onclick="openForm('newResident')">Tambah Penghuni</button>
+      </div>
+    </section>
+
+    <div class="stat-grid">
+      <div class="card">
+        <h2>Kamar Tersedia</h2>
+        <div class="value" id="stat-empty">0</div>
+      </div>
+      <div class="card">
+        <h2>Kamar Terisi</h2>
+        <div class="value" id="stat-occupied">0</div>
+      </div>
+      <div class="card">
+        <h2>Penghuni Aktif</h2>
+        <div class="value" id="stat-residents">0</div>
+      </div>
+      <div class="card">
+        <h2>Tagihan Belum Dibayar</h2>
+        <div class="value" id="stat-due">0</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tab-rooms" onclick="activateTab('rooms')">Data Kamar</button>
+      <button class="tab" id="tab-residents" onclick="activateTab('residents')">Penghuni</button>
+      <button class="tab" id="tab-payments" onclick="activateTab('payments')">Pembayaran</button>
+      <button class="tab" id="tab-invoices" onclick="activateTab('invoices')">Tagihan & Invoice</button>
+    </div>
+
+    <div class="panel" id="panel-rooms">
+      <div class="panel-header">
+        <h3>Data Kamar</h3>
+        <button class="button primary" onclick="openForm('newRoom')">Tambah Kamar</button>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table" id="roomsTable">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama Kamar</th>
+                <th>Jenis</th>
+                <th>Tarif /bln</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-residents" style="display:none;">
+      <div class="panel-header">
+        <h3>Penghuni</h3>
+        <button class="button primary" onclick="openForm('newResident')">Tambah Penghuni</button>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table" id="residentsTable">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama</th>
+                <th>Kamar</th>
+                <th>Masuk</th>
+                <th>Status Pembayaran</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-payments" style="display:none;">
+      <div class="panel-header">
+        <h3>Pembayaran Bulanan</h3>
+        <button class="button primary" onclick="openForm('newPayment')">Tambah Pembayaran</button>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table" id="paymentsTable">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Penghuni</th>
+                <th>Kamar</th>
+                <th>Bulan</th>
+                <th>Jumlah</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-invoices" style="display:none;">
+      <div class="panel-header">
+        <h3>Tagihan & Invoice</h3>
+        <button class="button primary" onclick="generateInvoice()">Buat Invoice</button>
+      </div>
+      <div class="panel-body">
+        <div class="invoice-box">
+          <h4>Invoice Contoh</h4>
+          <pre id="invoicePreview">Pilih penghuni dan buat invoice untuk tagihan bulanan secara otomatis.</pre>
+        </div>
+      </div>
+    </div>
+
+    <section class="marketing">
+      <h2>Kenapa ERP Kost Ini Penting?</h2>
+      <p>Website ini dibuat untuk membantu pemilik kost atau kontrakan mengelola unit hunian dengan mudah, mempromosikan kamar kosong, dan mencatat semua transaksi keuangan dalam satu tempat.</p>
+      <ul class="feature-list">
+        <li><span class="feature-dot"></span>Kelola data kamar dan lihat status kosong/isi secara real time.</li>
+        <li><span class="feature-dot"></span>Catat penghuni, tanggal masuk, dan nomor kontak dengan cepat.</li>
+        <li><span class="feature-dot"></span>Rekam pembayaran bulanan dan tandai tagihan sudah dibayar.</li>
+        <li><span class="feature-dot"></span>Buat invoice otomatis untuk penghuni dan simpan historinya.</li>
+        <li><span class="feature-dot"></span>Tampilan responsif, siap dipakai dari laptop maupun ponsel.</li>
+      </ul>
+    </section>
+
+    <footer>
+      <span>ERP Kost / Kontrakan • dibuat untuk manajemen properti kecil</span>
+      <span>Untuk publikasi: upload ke GitHub Pages, Netlify, atau hosting statis</span>
+    </footer>
+  </div>
+
+  <div id="modal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.56); z-index:20; align-items:center; justify-content:center; padding:12px;">
+    <div style="width:min(100%,540px); background:white; border-radius:28px; overflow:hidden; box-shadow:0 30px 80px rgba(15,23,42,0.22);">
+      <div style="padding:1.3rem 1.4rem; border-bottom:1px solid rgba(100,116,139,0.14); display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 id="modalTitle" style="margin:0; font-size:1.15rem;"></h3>
+          <p id="modalSubtitle" style="margin:0.35rem 0 0; color:var(--muted); font-size:0.95rem;">Lengkapi form di bawah.</p>
+        </div>
+        <button onclick="closeModal()" style="background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--muted);">×</button>
+      </div>
+      <div style="padding:1.4rem 1.4rem 1.6rem;">
+        <form id="resourceForm">
+          <div class="input-group" id="roomFields" style="display:none;">
+            <label>Nama Kamar<input name="name" placeholder="Contoh: Kamar A" required></label>
+            <label>Jenis Kamar<select name="type"><option value="Kost">Kost</option><option value="Kontrakan">Kontrakan</option><option value="Studio">Studio</option></select></label>
+            <label>Tarif Bulanan<input type="number" name="rate" placeholder="2000000" min="0" required></label>
+            <label>Status<select name="status"><option value="Kosong">Kosong</option><option value="Terisi">Terisi</option></select></label>
+          </div>
+          <div class="input-group" id="residentFields" style="display:none;">
+            <label>Nama Penghuni<input name="name" placeholder="Nama lengkap" required></label>
+            <label>Kamar<select name="room"></select></label>
+            <label>Kontak<input name="contact" placeholder="No. WA atau telepon"></label>
+            <label>Tanggal Masuk<input type="date" name="startDate" required></label>
+          </div>
+          <div class="input-group" id="paymentFields" style="display:none;">
+            <label>Penghuni<select name="resident"></select></label>
+            <label>Bulan<select name="month"><option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option></select></label>
+            <label>Jumlah Pembayaran<input type="number" name="amount" placeholder="1500000" min="0" required></label>
+            <label>Status<select name="status"><option value="Lunas">Lunas</option><option value="Belum Lunas">Belum Lunas</option></select></label>
+          </div>
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:flex-end; margin-top:0.8rem;">
+            <button type="button" class="button secondary" onclick="closeModal()">Batal</button>
+            <button type="submit" class="button primary">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const initialRooms = [
+      { id: 1, name: 'Kamar A', type: 'Kost', rate: 1200000, status: 'Terisi' },
+      { id: 2, name: 'Kamar B', type: 'Kost', rate: 1100000, status: 'Kosong' },
+      { id: 3, name: 'Kamar C', type: 'Kontrakan', rate: 2100000, status: 'Terisi' },
+      { id: 4, name: 'Kamar D', type: 'Studio', rate: 2500000, status: 'Kosong' }
+    ];
+
+    const initialResidents = [
+      { id: 1, name: 'Rian', roomId: 1, contact: '081234567890', startDate: '2025-11-01' },
+      { id: 2, name: 'Siti', roomId: 3, contact: '082233445566', startDate: '2025-12-15' }
+    ];
+
+    const initialPayments = [
+      { id: 1, residentId: 1, month: 'Mei', amount: 1200000, status: 'Lunas' },
+      { id: 2, residentId: 2, month: 'Mei', amount: 2100000, status: 'Belum Lunas' }
+    ];
+
+    let rooms = loadData('erpRooms', initialRooms);
+    let residents = loadData('erpResidents', initialResidents);
+    let payments = loadData('erpPayments', initialPayments);
+    let currentTab = 'rooms';
+    let activeForm = '';
+    let editingId = null;
+
+    function loadData(key, defaultValue) {
+      const raw = localStorage.getItem(key);
+      if (!raw) {
+        localStorage.setItem(key, JSON.stringify(defaultValue));
+        return defaultValue;
+      }
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        return defaultValue;
+      }
+    }
+
+    function saveData(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function activateTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.id === `tab-${tab}`));
+      document.querySelectorAll('.panel').forEach(el => el.style.display = el.id === `panel-${tab}` ? 'block' : 'none');
+      renderAll();
+    }
+
+    function renderAll() {
+      renderStats();
+      renderRooms();
+      renderResidents();
+      renderPayments();
+      renderInvoice();
+    }
+
+    function renderStats() {
+      const occupied = rooms.filter(item => item.status === 'Terisi').length;
+      const empty = rooms.filter(item => item.status === 'Kosong').length;
+      const dueCount = payments.filter(item => item.status === 'Belum Lunas').length;
+      document.getElementById('stat-empty').textContent = empty;
+      document.getElementById('stat-occupied').textContent = occupied;
+      document.getElementById('stat-residents').textContent = residents.length;
+      document.getElementById('stat-due').textContent = dueCount;
+    }
+
+    function renderRooms() {
+      const tbody = document.querySelector('#roomsTable tbody');
+      tbody.innerHTML = '';
+      rooms.forEach((room, index) => {
+        const row = document.createElement('tr');
+        const badgeClass = room.status === 'Terisi' ? 'occupied' : 'free';
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${room.name}</td>
+          <td>${room.type}</td>
+          <td>Rp ${room.rate.toLocaleString()}</td>
+          <td><span class="badge ${badgeClass}">${room.status}</span></td>
+          <td>
+            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="editRoom(${room.id})">Edit</button>
+            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="deleteRoom(${room.id})">Hapus</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderResidents() {
+      const tbody = document.querySelector('#residentsTable tbody');
+      tbody.innerHTML = '';
+      residents.forEach((resident, index) => {
+        const room = rooms.find(r => r.id === resident.roomId) || { name: 'Tidak Ditemukan' };
+        const paymentStatus = calculateResidentPaymentStatus(resident.id);
+        const badgeClass = paymentStatus === 'Lunas' ? 'paid' : 'due';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${resident.name}</td>
+          <td>${room.name}</td>
+          <td>${resident.startDate}</td>
+          <td><span class="badge ${badgeClass}">${paymentStatus}</span></td>
+          <td>
+            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="editResident(${resident.id})">Edit</button>
+            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="deleteResident(${resident.id})">Hapus</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderPayments() {
+      const tbody = document.querySelector('#paymentsTable tbody');
+      tbody.innerHTML = '';
+      payments.forEach((payment, index) => {
+        const resident = residents.find(r => r.id === payment.residentId) || { name: 'Penghuni tidak ditemukan', roomId: null };
+        const room = rooms.find(r => r.id === resident.roomId) || { name: '-' };
+        const badgeClass = payment.status === 'Lunas' ? 'paid' : 'due';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${resident.name}</td>
+          <td>${room.name}</td>
+          <td>${payment.month}</td>
+          <td>Rp ${payment.amount.toLocaleString()}</td>
+          <td><span class="badge ${badgeClass}">${payment.status}</span></td>
+          <td>
+            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="togglePaymentStatus(${payment.id})">Tandai</button>
+            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="deletePayment(${payment.id})">Hapus</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function calculateResidentPaymentStatus(residentId) {
+      const residentPayments = payments.filter(p => p.residentId === residentId);
+      if (!residentPayments.length) return 'Belum Lunas';
+      return residentPayments.some(p => p.status === 'Belum Lunas') ? 'Belum Lunas' : 'Lunas';
+    }
+
+    function openForm(type) {
+      activeForm = type;
+      editingId = null;
+      const modal = document.getElementById('modal');
+      modal.style.display = 'flex';
+      document.getElementById('resourceForm').reset();
+      const roomFields = document.getElementById('roomFields');
+      const residentFields = document.getElementById('residentFields');
+      const paymentFields = document.getElementById('paymentFields');
+      roomFields.style.display = 'none';
+      residentFields.style.display = 'none';
+      paymentFields.style.display = 'none';
+      if (type === 'newRoom' || type === 'editRoom') {
+        document.getElementById('modalTitle').textContent = type === 'editRoom' ? 'Edit Data Kamar' : 'Tambah Kamar';
+        roomFields.style.display = 'grid';
+      }
+      if (type === 'newResident' || type === 'editResident') {
+        document.getElementById('modalTitle').textContent = type === 'editResident' ? 'Edit Penghuni' : 'Tambah Penghuni';
+        residentFields.style.display = 'grid';
+        fillRoomSelect();
+      }
+      if (type === 'newPayment') {
+        document.getElementById('modalTitle').textContent = 'Tambah Pembayaran';
+        paymentFields.style.display = 'grid';
+        fillResidentSelect();
+      }
+      if (type === 'editPayment') {
+        document.getElementById('modalTitle').textContent = 'Edit Pembayaran';
+        paymentFields.style.display = 'grid';
+        fillResidentSelect();
+      }
+      if (type === 'newRoom') {
+        document.querySelector('#roomFields input[name="name"]').focus();
+      }
+      if (type === 'newResident') {
+        document.querySelector('#residentFields input[name="name"]').focus();
+      }
+    }
+
+    function fillRoomSelect() {
+      const select = document.querySelector('#residentFields select[name="room"]');
+      select.innerHTML = '';
+      rooms.forEach(room => {
+        const option = document.createElement('option');
+        option.value = room.id;
+        option.textContent = `${room.name} (${room.status})`;
+        select.appendChild(option);
+      });
+    }
+
+    function fillResidentSelect() {
+      const select = document.querySelector('#paymentFields select[name="resident"]');
+      select.innerHTML = '';
+      residents.forEach(resident => {
+        const option = document.createElement('option');
+        option.value = resident.id;
+        const room = rooms.find(r => r.id === resident.roomId);
+        option.textContent = `${resident.name} - ${room ? room.name : 'Tidak ada kamar'}`;
+        select.appendChild(option);
+      });
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    document.getElementById('resourceForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const form = event.target;
+      if (activeForm === 'newRoom' || activeForm === 'editRoom') {
+        const name = form.querySelector('input[name="name"]').value.trim();
+        const type = form.querySelector('select[name="type"]').value;
+        const rate = Number(form.querySelector('input[name="rate"]').value);
+        const status = form.querySelector('select[name="status"]').value;
+        if (!name || !rate) return;
+        if (editingId) {
+          const room = rooms.find(item => item.id === editingId);
+          room.name = name;
+          room.type = type;
+          room.rate = rate;
+          room.status = status;
+        } else {
+          rooms.push({ id: Date.now(), name, type, rate, status });
+        }
+        saveData('erpRooms', rooms);
+      }
+      if (activeForm === 'newResident' || activeForm === 'editResident') {
+        const name = form.querySelector('#residentFields input[name="name"]').value.trim();
+        const roomId = Number(form.querySelector('#residentFields select[name="room"]').value);
+        const contact = form.querySelector('#residentFields input[name="contact"]').value.trim();
+        const startDate = form.querySelector('#residentFields input[name="startDate"]').value;
+        if (!name || !roomId || !startDate) return;
+        if (editingId) {
+          const resident = residents.find(item => item.id === editingId);
+          resident.name = name;
+          resident.roomId = roomId;
+          resident.contact = contact;
+          resident.startDate = startDate;
+        } else {
+          residents.push({ id: Date.now(), name, roomId, contact, startDate });
+        }
+        saveData('erpResidents', residents);
+      }
+      if (activeForm === 'newPayment' || activeForm === 'editPayment') {
+        const residentId = Number(form.querySelector('#paymentFields select[name="resident"]').value);
+        const month = form.querySelector('#paymentFields select[name="month"]').value;
+        const amount = Number(form.querySelector('#paymentFields input[name="amount"]').value);
+        const status = form.querySelector('#paymentFields select[name="status"]').value;
+        if (!residentId || !month || !amount) return;
+        if (editingId) {
+          const payment = payments.find(item => item.id === editingId);
+          payment.residentId = residentId;
+          payment.month = month;
+          payment.amount = amount;
+          payment.status = status;
+        } else {
+          payments.push({ id: Date.now(), residentId, month, amount, status });
+        }
+        saveData('erpPayments', payments);
+      }
+      closeModal();
+      renderAll();
+    });
+
+    function editRoom(id) {
+      const room = rooms.find(item => item.id === id);
+      if (!room) return;
+      editingId = id;
+      activeForm = 'editRoom';
+      openForm('editRoom');
+      const form = document.getElementById('resourceForm');
+      form.querySelector('input[name="name"]').value = room.name;
+      form.querySelector('select[name="type"]').value = room.type;
+      form.querySelector('input[name="rate"]').value = room.rate;
+      form.querySelector('select[name="status"]').value = room.status;
+    }
+
+    function deleteRoom(id) {
+      if (!confirm('Hapus kamar ini? Semua data penghuni dan pembayaran terkait juga akan terpengaruh.')) return;
+      rooms = rooms.filter(room => room.id !== id);
+      residents = residents.filter(resident => resident.roomId !== id);
+      payments = payments.filter(payment => residents.some(r => r.id === payment.residentId));
+      saveData('erpRooms', rooms);
+      saveData('erpResidents', residents);
+      saveData('erpPayments', payments);
+      renderAll();
+    }
+
+    function editResident(id) {
+      const resident = residents.find(item => item.id === id);
+      if (!resident) return;
+      editingId = id;
+      activeForm = 'editResident';
+      openForm('editResident');
+      const form = document.getElementById('resourceForm');
+      form.querySelector('#residentFields input[name="name"]').value = resident.name;
+      form.querySelector('#residentFields select[name="room"]').value = resident.roomId;
+      form.querySelector('#residentFields input[name="contact"]').value = resident.contact;
+      form.querySelector('#residentFields input[name="startDate"]').value = resident.startDate;
+    }
+
+    function deleteResident(id) {
+      if (!confirm('Hapus penghuni ini? Data pembayaran terkait juga akan dihapus.')) return;
+      residents = residents.filter(resident => resident.id !== id);
+      payments = payments.filter(payment => payment.residentId !== id);
+      saveData('erpResidents', residents);
+      saveData('erpPayments', payments);
+      renderAll();
+    }
+
+    function deletePayment(id) {
+      if (!confirm('Hapus data pembayaran ini?')) return;
+      payments = payments.filter(payment => payment.id !== id);
+      saveData('erpPayments', payments);
+      renderAll();
+    }
+
+    function togglePaymentStatus(id) {
+      const payment = payments.find(item => item.id === id);
+      if (!payment) return;
+      payment.status = payment.status === 'Lunas' ? 'Belum Lunas' : 'Lunas';
+      saveData('erpPayments', payments);
+      renderAll();
+    }
+
+    function generateInvoice() {
+      const latest = payments[payments.length - 1];
+      if (!latest) {
+        document.getElementById('invoicePreview').textContent = 'Tambahkan pembayaran terlebih dahulu untuk membuat invoice.';
+        return;
+      }
+      const resident = residents.find(r => r.id === latest.residentId) || {};
+      const room = rooms.find(r => r.id === resident.roomId) || {};
+      const total = latest.amount;
+      const invoiceText = `INVOICE KOST / KONTRAKAN\n\nNama Penghuni: ${resident.name || 'Tidak Ditemukan'}\nKamar: ${room.name || '-'}\nJenis: ${room.type || '-'}\nBulan Tagihan: ${latest.month}\nJumlah Tagihan: Rp ${total.toLocaleString()}\nStatus: ${latest.status}\n\nTerima kasih atas pembayaran Anda.\n
+Silakan simpan atau screenshot invoice ini sebagai bukti.`;
+      document.getElementById('invoicePreview').textContent = invoiceText;
+    }
+
+    function renderInvoice() {
+      const duePayments = payments.filter(p => p.status === 'Belum Lunas');
+      const summary = duePayments.length
+        ? `Tagihan belum terbayar: ${duePayments.length} item. Silakan pilih pembayaran terbaru untuk buat invoice.`
+        : 'Semua pembayaran sudah lunas. Tambahkan tagihan bila diperlukan.';
+      document.getElementById('invoicePreview').textContent = summary;
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
