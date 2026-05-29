@@ -3,23 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ERP Kost & Kontrakan</title>
-  <meta name="description" content="Sistem ERP kosan untuk manajemen kamar, penghuni, pembayaran bulanan, dan invoice." />
+  <title>KostaHub - ERP Kost & Kontrakan Profesional</title>
+  <meta name="description" content="Sistem ERP profesional untuk manajemen kosan dan kontrakan. Kelola kamar, penghuni, pembayaran, dan invoice dengan mudah dan aman." />
   <style>
     :root {
-      --bg: #f6f8fb;
+      --bg: #f8fafb;
       --surface: #ffffff;
-      --surface-strong: #f2f7ff;
-      --text: #172a45;
-      --muted: #62718c;
-      --primary: #2c7cfa;
-      --accent: #ff7a59;
-      --success: #34c38f;
-      --warning: #f1b44c;
-      --danger: #f46a6a;
-      --border: rgba(100, 116, 139, 0.15);
-      --radius: 24px;
-      font-family: Inter, system-ui, sans-serif;
+      --surface-hover: #f3f5f7;
+      --text: #1a1f36;
+      --text-secondary: #5a6370;
+      --primary: #4f46e5;
+      --primary-light: #6366f1;
+      --primary-dark: #4338ca;
+      --accent: #ec4899;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: rgba(79, 70, 229, 0.08);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+      --radius-lg: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
 
     * {
@@ -29,245 +35,488 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(180deg, #eef5ff 0%, #f6f8fb 100%);
+      background: var(--bg);
       color: var(--text);
     }
 
-    .page {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 28px 18px 48px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-
-    .brand {
+    /* LOGIN SCREEN */
+    .login-screen {
       display: flex;
       align-items: center;
-      gap: 0.9rem;
-      text-decoration: none;
-      color: var(--text);
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
-    .brand-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-      background: radial-gradient(circle, rgba(44,124,250,1) 0%, rgba(67,200,250,1) 100%);
-      display: grid;
-      place-items: center;
-      color: #fff;
+    .login-container {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 3rem;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .logo-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .logo-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
       font-weight: 800;
+      font-size: 1.6rem;
+      box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
     }
 
-    .brand-title {
+    .logo-text {
       display: flex;
       flex-direction: column;
-      gap: 2px;
     }
 
-    .brand-title strong {
-      font-size: 1.1rem;
+    .logo-text strong {
+      font-size: 1.4rem;
+      color: var(--text);
     }
 
-    .top-action {
+    .logo-text span {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .login-title {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+      color: var(--text);
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .login-form {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .form-group {
       display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 0.4rem;
     }
 
-    .button,
-    button {
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 0.95rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 180ms ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    .role-option {
+      background: var(--surface-hover);
+      border: 2px solid transparent;
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 180ms ease;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .role-option:hover {
+      background: var(--bg);
+      border-color: var(--primary-light);
+    }
+
+    .role-option.active {
+      background: rgba(79, 70, 229, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .button {
       border: none;
-      border-radius: 999px;
-      padding: 0.85rem 1.35rem;
+      border-radius: var(--radius);
+      padding: 0.95rem 1.2rem;
       cursor: pointer;
       font-weight: 600;
-      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      font-size: 1rem;
+      transition: all 180ms ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
     }
 
-    .button:hover,
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    .button.primary,
-    .button.primary:focus {
-      background: var(--primary);
+    .button.primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white;
-      box-shadow: 0 16px 40px rgba(44,124,250,0.18);
+      box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+    }
+
+    .button.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(79, 70, 229, 0.4);
     }
 
     .button.secondary {
-      background: white;
+      background: var(--surface-hover);
       color: var(--text);
-      box-shadow: 0 12px 30px rgba(17,24,39,0.06);
+      border: 1px solid var(--border);
     }
 
-    .hero {
-      display: grid;
-      gap: 24px;
-      padding: 32px;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, rgba(44,124,250,0.14), rgba(255,255,255,0.96));
-      border: 1px solid rgba(44,124,250,0.12);
-      margin-bottom: 24px;
+    .button.secondary:hover {
+      background: var(--bg);
     }
 
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.3rem);
-      line-height: 1.05;
+    .button.danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
     }
 
-    .hero p {
-      max-width: 780px;
-      margin: 0;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.7;
+    .button.danger:hover {
+      background: rgba(239, 68, 68, 0.2);
     }
 
-    .hero-actions {
+    /* APP LAYOUT */
+    .app-layout {
       display: flex;
-      flex-wrap: wrap;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, var(--text) 0%, #0f1419 100%);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-logo {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.4rem;
+    }
+
+    .sidebar-title strong {
+      font-size: 1.1rem;
+    }
+
+    .sidebar-title span {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      display: block;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
       gap: 0.8rem;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 180ms ease;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-item.active {
+      background: rgba(79, 70, 229, 0.3);
+      border-left: 3px solid var(--primary);
+      padding-left: calc(1rem - 3px);
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .user-info {
+      padding: 0.8rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+    }
+
+    .user-role {
+      opacity: 0.7;
+      font-size: 0.85rem;
+    }
+
+    /* HEADER */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      box-shadow: var(--shadow-sm);
+      flex: 1;
+    }
+
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .page-subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
 
     .stat-grid {
       display: grid;
-      gap: 18px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      margin-bottom: 28px;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      margin-bottom: 2rem;
     }
 
-    .card {
-      background: var(--surface);
+    .stat-card {
+      background: white;
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.4rem 1.5rem;
-      box-shadow: 0 18px 40px rgba(31,45,61,0.05);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 180ms ease;
     }
 
-    .card h2 {
-      margin: 0 0 0.85rem;
-      font-size: 0.95rem;
-      color: var(--muted);
+    .stat-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 0.8rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
+      font-weight: 600;
     }
 
-    .card .value {
-      font-size: 2rem;
+    .stat-value {
+      font-size: 2.2rem;
       font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .stat-change {
+      font-size: 0.85rem;
+      color: var(--success);
       margin-top: 0.6rem;
     }
 
-    .grid-2 {
-      display: grid;
-      gap: 18px;
-      grid-template-columns: minmax(280px, 420px) 1fr;
-      margin-bottom: 24px;
-    }
-
     .panel {
-      border-radius: var(--radius);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      background: var(--surface);
+      background: white;
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
     }
 
     .panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
-      padding: 1rem 1.3rem;
-      border-bottom: 1px solid rgba(100, 116, 139, 0.14);
-      background: rgba(255,255,255,0.82);
+      gap: 1rem;
+      padding: 1.4rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-hover);
     }
 
     .panel-header h3 {
       margin: 0;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
+      color: var(--text);
     }
 
     .panel-body {
-      padding: 1rem 1.3rem 1.4rem;
+      padding: 1.5rem 1.8rem;
     }
 
-    .tabs {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      margin-bottom: 1rem;
-    }
-
-    .tab {
-      background: transparent;
-      border: none;
-      padding: 1rem 0.9rem;
-      cursor: pointer;
-      color: var(--muted);
-      font-weight: 600;
-      transition: background 180ms ease, color 180ms ease;
-    }
-
-    .tab.active {
-      background: var(--primary);
-      color: white;
+    .table-responsive {
+      overflow-x: auto;
     }
 
     .table {
       width: 100%;
       border-spacing: 0;
       border-collapse: collapse;
-      min-width: 100%;
     }
 
     .table th,
     .table td {
       text-align: left;
-      padding: 0.95rem 0.9rem;
-      border-bottom: 1px solid rgba(100, 116, 139, 0.10);
+      padding: 1rem 0.9rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .table th {
-      font-size: 0.84rem;
-      color: var(--muted);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      background: var(--surface-hover);
+    }
+
+    .table tbody tr:hover {
+      background: var(--surface-hover);
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 0.35rem 0.7rem;
+      padding: 0.4rem 0.85rem;
       border-radius: 999px;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 700;
       text-transform: uppercase;
     }
 
-    .badge.free { background: rgba(52,195,143,0.14); color: #147a57; }
-    .badge.occupied { background: rgba(244,106,106,0.15); color: #a32626; }
-    .badge.due { background: rgba(241,180,76,0.16); color: #7d5a16; }
-    .badge.paid { background: rgba(44,124,250,0.14); color: #0f4bb8; }
+    .badge.free {
+      background: rgba(16, 185, 129, 0.1);
+      color: #047857;
+    }
 
-    .small-text {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.7;
+    .badge.occupied {
+      background: rgba(239, 68, 68, 0.1);
+      color: #b91c1c;
+    }
+
+    .badge.due {
+      background: rgba(245, 158, 11, 0.1);
+      color: #92400e;
+    }
+
+    .badge.paid {
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
+    }
+
+    .badge.admin {
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
+    }
+
+    .badge.user {
+      background: rgba(52, 211, 153, 0.1);
+      color: #065f46;
     }
 
     .input-group {
@@ -280,346 +529,552 @@
     select,
     textarea {
       width: 100%;
-      border-radius: 16px;
-      border: 1px solid rgba(100, 116, 139, 0.18);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
       padding: 0.95rem 1rem;
       font-size: 1rem;
       background: white;
       color: var(--text);
+      transition: border-color 180ms ease;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
       outline: none;
-      border-color: rgba(44,124,250,0.45);
-      box-shadow: 0 0 0 3px rgba(44,124,250,0.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
     }
 
-    .table-responsive {
-      overflow-x: auto;
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.56);
+      z-index: 20;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
     }
 
-    .marketing {
-      padding: 1.8rem;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
-      border: 1px solid rgba(44,124,250,0.12);
-      margin-top: 24px;
-      display: grid;
-      gap: 16px;
-    }
-
-    .marketing h2 {
-      margin: 0;
-    }
-
-    .marketing p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.75;
-    }
-
-    .feature-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 0.75rem;
-    }
-
-    .feature-list li {
+    .modal.open {
       display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-      color: var(--text);
-      line-height: 1.7;
     }
 
-    .feature-dot {
-      width: 10px;
-      height: 10px;
-      background: var(--primary);
-      border-radius: 50%;
-      margin-top: 0.6rem;
-      flex-shrink: 0;
+    .modal-content {
+      width: min(100%, 560px);
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
     }
 
-    .invoice-box {
-      padding: 1.25rem;
-      border-radius: 20px;
-      background: #f8fbff;
-      border: 1px dashed rgba(44,124,250,0.25);
-      margin-top: 1rem;
-      overflow-x: auto;
-    }
-
-    .invoice-box pre {
-      margin: 0;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      color: var(--text);
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    footer {
-      margin-top: 42px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(100, 116, 139, 0.12);
-      color: var(--muted);
+    .modal-header {
+      padding: 1.5rem 1.8rem;
+      border-bottom: 1px solid var(--border);
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
-      gap: 12px;
-      font-size: 0.92rem;
+      align-items: center;
     }
 
-    @media (max-width: 980px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .tabs {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: var(--text);
     }
 
-    @media (max-width: 640px) {
-      .hero,
-      .panel,
-      .card {
-        padding: 1.25rem;
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .modal-body {
+      padding: 1.8rem;
+    }
+
+    .modal-footer {
+      padding: 1.2rem 1.8rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.8rem;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .alert {
+      padding: 1rem 1.2rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      border-left: 4px solid;
+    }
+
+    .alert.success {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: var(--success);
+      color: #047857;
+    }
+
+    .alert.error {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--danger);
+      color: #991b1b;
+    }
+
+    @media (max-width: 768px) {
+      .app-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        padding: 1rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .sidebar-menu {
+        display: none;
       }
 
       header {
-        padding-bottom: 10px;
+        flex-direction: column;
+        text-align: center;
       }
 
-      .tabs {
+      .content-area {
+        padding: 1.5rem;
+      }
+
+      .stat-grid {
         grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <a class="brand" href="#">
-        <div class="brand-logo">K</div>
-        <div class="brand-title">
-          <strong>ERP KOST</strong>
-          <span>Manajemen Kosan & Kontrakan</span>
-        </div>
-      </a>
-      <div class="top-action">
-        <button class="button primary" onclick="activateTab('rooms')">Data Kamar</button>
-        <button class="button secondary" onclick="activateTab('residents')">Penghuni</button>
-        <button class="button secondary" onclick="activateTab('payments')">Pembayaran</button>
-      </div>
-    </header>
-
-    <section class="hero">
-      <div>
-        <h1>ERP Kosan Lengkap untuk Marketing, Finance, dan Operasional</h1>
-        <p>Kelola data kamar, pantau status kosong/isi, rekam penghuni, kelola tagihan bulanan, dan buat invoice profesional tanpa coding. Cocok untuk pemilik kos, kontrakan, atau manajemen properti kecil.</p>
-      </div>
-      <div class="hero-actions">
-        <button class="button primary" onclick="openForm('newRoom')">Tambah Kamar</button>
-        <button class="button secondary" onclick="openForm('newResident')">Tambah Penghuni</button>
-      </div>
-    </section>
-
-    <div class="stat-grid">
-      <div class="card">
-        <h2>Kamar Tersedia</h2>
-        <div class="value" id="stat-empty">0</div>
-      </div>
-      <div class="card">
-        <h2>Kamar Terisi</h2>
-        <div class="value" id="stat-occupied">0</div>
-      </div>
-      <div class="card">
-        <h2>Penghuni Aktif</h2>
-        <div class="value" id="stat-residents">0</div>
-      </div>
-      <div class="card">
-        <h2>Tagihan Belum Dibayar</h2>
-        <div class="value" id="stat-due">0</div>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" id="tab-rooms" onclick="activateTab('rooms')">Data Kamar</button>
-      <button class="tab" id="tab-residents" onclick="activateTab('residents')">Penghuni</button>
-      <button class="tab" id="tab-payments" onclick="activateTab('payments')">Pembayaran</button>
-      <button class="tab" id="tab-invoices" onclick="activateTab('invoices')">Tagihan & Invoice</button>
-    </div>
-
-    <div class="panel" id="panel-rooms">
-      <div class="panel-header">
-        <h3>Data Kamar</h3>
-        <button class="button primary" onclick="openForm('newRoom')">Tambah Kamar</button>
-      </div>
-      <div class="panel-body">
-        <div class="table-responsive">
-          <table class="table" id="roomsTable">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Nama Kamar</th>
-                <th>Jenis</th>
-                <th>Tarif /bln</th>
-                <th>Status</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-container">
+      <div class="logo-header">
+        <div class="logo-icon">K</div>
+        <div class="logo-text">
+          <strong>KostaHub</strong>
+          <span>ERP Profesional</span>
         </div>
       </div>
-    </div>
-
-    <div class="panel" id="panel-residents" style="display:none;">
-      <div class="panel-header">
-        <h3>Penghuni</h3>
-        <button class="button primary" onclick="openForm('newResident')">Tambah Penghuni</button>
-      </div>
-      <div class="panel-body">
-        <div class="table-responsive">
-          <table class="table" id="residentsTable">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Nama</th>
-                <th>Kamar</th>
-                <th>Masuk</th>
-                <th>Status Pembayaran</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+      <h1 class="login-title">Masuk</h1>
+      <p class="login-subtitle">Kelola kosan Anda dengan mudah dan aman</p>
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label>Pilih Peran</label>
+          <div class="role-selector">
+            <div class="role-option active" data-role="admin" onclick="selectRole('admin')">👨‍💼 Admin</div>
+            <div class="role-option" data-role="user" onclick="selectRole('user')">👤 Penghuni</div>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="panel" id="panel-payments" style="display:none;">
-      <div class="panel-header">
-        <h3>Pembayaran Bulanan</h3>
-        <button class="button primary" onclick="openForm('newPayment')">Tambah Pembayaran</button>
-      </div>
-      <div class="panel-body">
-        <div class="table-responsive">
-          <table class="table" id="paymentsTable">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Penghuni</th>
-                <th>Kamar</th>
-                <th>Bulan</th>
-                <th>Jumlah</th>
-                <th>Status</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="masukkan email" required />
         </div>
-      </div>
-    </div>
-
-    <div class="panel" id="panel-invoices" style="display:none;">
-      <div class="panel-header">
-        <h3>Tagihan & Invoice</h3>
-        <button class="button primary" onclick="generateInvoice()">Buat Invoice</button>
-      </div>
-      <div class="panel-body">
-        <div class="invoice-box">
-          <h4>Invoice Contoh</h4>
-          <pre id="invoicePreview">Pilih penghuni dan buat invoice untuk tagihan bulanan secara otomatis.</pre>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="masukkan password" required />
         </div>
-      </div>
+        <button type="submit" class="button primary" style="width: 100%; margin-top: 0.5rem;">Masuk</button>
+      </form>
+      <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 1.5rem;">
+        Demo: Email apa saja + Password: demo
+      </p>
     </div>
-
-    <section class="marketing">
-      <h2>Kenapa ERP Kost Ini Penting?</h2>
-      <p>Website ini dibuat untuk membantu pemilik kost atau kontrakan mengelola unit hunian dengan mudah, mempromosikan kamar kosong, dan mencatat semua transaksi keuangan dalam satu tempat.</p>
-      <ul class="feature-list">
-        <li><span class="feature-dot"></span>Kelola data kamar dan lihat status kosong/isi secara real time.</li>
-        <li><span class="feature-dot"></span>Catat penghuni, tanggal masuk, dan nomor kontak dengan cepat.</li>
-        <li><span class="feature-dot"></span>Rekam pembayaran bulanan dan tandai tagihan sudah dibayar.</li>
-        <li><span class="feature-dot"></span>Buat invoice otomatis untuk penghuni dan simpan historinya.</li>
-        <li><span class="feature-dot"></span>Tampilan responsif, siap dipakai dari laptop maupun ponsel.</li>
-      </ul>
-    </section>
-
-    <footer>
-      <span>ERP Kost / Kontrakan • dibuat untuk manajemen properti kecil</span>
-      <span>Untuk publikasi: upload ke GitHub Pages, Netlify, atau hosting statis</span>
-    </footer>
   </div>
 
-  <div id="modal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.56); z-index:20; align-items:center; justify-content:center; padding:12px;">
-    <div style="width:min(100%,540px); background:white; border-radius:28px; overflow:hidden; box-shadow:0 30px 80px rgba(15,23,42,0.22);">
-      <div style="padding:1.3rem 1.4rem; border-bottom:1px solid rgba(100,116,139,0.14); display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <h3 id="modalTitle" style="margin:0; font-size:1.15rem;"></h3>
-          <p id="modalSubtitle" style="margin:0.35rem 0 0; color:var(--muted); font-size:0.95rem;">Lengkapi form di bawah.</p>
+  <!-- APP LAYOUT -->
+  <div id="appScreen" class="app-layout" style="display: none;">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <a class="sidebar-brand" href="#">
+        <div class="sidebar-logo">K</div>
+        <div class="sidebar-title">
+          <strong>KostaHub</strong>
+          <span>ERP Kosan</span>
         </div>
-        <button onclick="closeModal()" style="background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--muted);">×</button>
+      </a>
+
+      <ul class="sidebar-menu" id="sidebarMenu">
+        <li class="sidebar-item active" onclick="navigateTo('dashboard')">📊 Dashboard</li>
+        <li class="sidebar-item" id="menu-rooms" onclick="navigateTo('rooms')">🏠 Data Kamar</li>
+        <li class="sidebar-item" id="menu-residents" onclick="navigateTo('residents')">👥 Penghuni</li>
+        <li class="sidebar-item" id="menu-payments" onclick="navigateTo('payments')">💳 Pembayaran</li>
+        <li class="sidebar-item" id="menu-invoices" onclick="navigateTo('invoices')">📋 Invoice</li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <strong id="userDisplay">Admin User</strong>
+          <div class="user-role" id="roleDisplay">Admin</div>
+        </div>
+        <button class="button secondary" style="width: 100%;" onclick="logout()">Keluar</button>
       </div>
-      <div style="padding:1.4rem 1.4rem 1.6rem;">
-        <form id="resourceForm">
-          <div class="input-group" id="roomFields" style="display:none;">
-            <label>Nama Kamar<input name="name" placeholder="Contoh: Kamar A" required></label>
-            <label>Jenis Kamar<select name="type"><option value="Kost">Kost</option><option value="Kontrakan">Kontrakan</option><option value="Studio">Studio</option></select></label>
-            <label>Tarif Bulanan<input type="number" name="rate" placeholder="2000000" min="0" required></label>
-            <label>Status<select name="status"><option value="Kosong">Kosong</option><option value="Terisi">Terisi</option></select></label>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <header>
+        <h2 class="header-title" id="pageTitle">Dashboard</h2>
+        <div class="header-actions">
+          <button class="button primary" id="topActionButton" style="display: none;"></button>
+        </div>
+      </header>
+
+      <div class="content-area">
+        <!-- DASHBOARD -->
+        <div id="page-dashboard" class="page-view">
+          <div class="page-title">Dashboard</div>
+          <p class="page-subtitle">Ringkasan data kosan Anda hari ini</p>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <h3>Total Kamar</h3>
+              <p class="stat-value" id="stat-total-rooms">0</p>
+              <p class="stat-change">✓ Semua kamar terdaftar</p>
+            </div>
+            <div class="stat-card">
+              <h3>Kamar Kosong</h3>
+              <p class="stat-value" id="stat-empty-rooms">0</p>
+              <p class="stat-change">Siap untuk pemasaran</p>
+            </div>
+            <div class="stat-card">
+              <h3>Kamar Terisi</h3>
+              <p class="stat-value" id="stat-occupied-rooms">0</p>
+              <p class="stat-change">Dengan penghuni aktif</p>
+            </div>
+            <div class="stat-card">
+              <h3>Penghuni Aktif</h3>
+              <p class="stat-value" id="stat-active-residents">0</p>
+              <p class="stat-change">Status pembayaran dipantau</p>
+            </div>
+            <div class="stat-card">
+              <h3>Tagihan Bulan Ini</h3>
+              <p class="stat-value" id="stat-this-month">Rp 0</p>
+              <p class="stat-change">Revenu proyeksi</p>
+            </div>
+            <div class="stat-card">
+              <h3>Belum Dibayar</h3>
+              <p class="stat-value" id="stat-unpaid">0</p>
+              <p class="stat-change">Butuh follow-up</p>
+            </div>
           </div>
-          <div class="input-group" id="residentFields" style="display:none;">
-            <label>Nama Penghuni<input name="name" placeholder="Nama lengkap" required></label>
-            <label>Kamar<select name="room"></select></label>
-            <label>Kontak<input name="contact" placeholder="No. WA atau telepon"></label>
-            <label>Tanggal Masuk<input type="date" name="startDate" required></label>
+        </div>
+
+        <!-- ROOMS PAGE (Admin) -->
+        <div id="page-rooms" class="page-view" style="display: none;">
+          <div class="page-title">Data Kamar</div>
+          <p class="page-subtitle">Kelola semua unit hunian Anda</p>
+          <div class="action-bar">
+            <div></div>
+            <button class="button primary" onclick="openModal('roomForm')">+ Tambah Kamar</button>
           </div>
-          <div class="input-group" id="paymentFields" style="display:none;">
-            <label>Penghuni<select name="resident"></select></label>
-            <label>Bulan<select name="month"><option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option></select></label>
-            <label>Jumlah Pembayaran<input type="number" name="amount" placeholder="1500000" min="0" required></label>
-            <label>Status<select name="status"><option value="Lunas">Lunas</option><option value="Belum Lunas">Belum Lunas</option></select></label>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Daftar Kamar</h3>
+            </div>
+            <div class="panel-body">
+              <div class="table-responsive">
+                <table class="table" id="roomsTable">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Nama Kamar</th>
+                      <th>Jenis</th>
+                      <th>Tarif /Bulan</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
           </div>
-          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; justify-content:flex-end; margin-top:0.8rem;">
-            <button type="button" class="button secondary" onclick="closeModal()">Batal</button>
-            <button type="submit" class="button primary">Simpan</button>
+        </div>
+
+        <!-- RESIDENTS PAGE -->
+        <div id="page-residents" class="page-view" style="display: none;">
+          <div class="page-title">Penghuni</div>
+          <p class="page-subtitle" id="residentsSubtitle">Kelola data penghuni kosan Anda</p>
+          <div class="action-bar">
+            <div></div>
+            <button class="button primary" id="addResidentBtn" onclick="openModal('residentForm')" style="display: none;">+ Tambah Penghuni</button>
           </div>
-        </form>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Daftar Penghuni</h3>
+            </div>
+            <div class="panel-body">
+              <div class="table-responsive">
+                <table class="table" id="residentsTable">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Nama</th>
+                      <th>Kamar</th>
+                      <th>Kontak</th>
+                      <th>Masuk</th>
+                      <th>Status Pembayaran</th>
+                      <th id="residentsActionHeader" style="display: none;">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENTS PAGE -->
+        <div id="page-payments" class="page-view" style="display: none;">
+          <div class="page-title">Pembayaran Bulanan</div>
+          <p class="page-subtitle" id="paymentsSubtitle">Catat dan pantau pembayaran bulanan penghuni</p>
+          <div class="action-bar">
+            <div></div>
+            <button class="button primary" id="addPaymentBtn" onclick="openModal('paymentForm')" style="display: none;">+ Catat Pembayaran</button>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <h3>Riwayat Pembayaran</h3>
+            </div>
+            <div class="panel-body">
+              <div class="table-responsive">
+                <table class="table" id="paymentsTable">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Penghuni</th>
+                      <th>Kamar</th>
+                      <th>Bulan</th>
+                      <th>Jumlah</th>
+                      <th>Status</th>
+                      <th id="paymentsActionHeader" style="display: none;">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVOICES PAGE -->
+        <div id="page-invoices" class="page-view" style="display: none;">
+          <div class="page-title">Invoice & Tagihan</div>
+          <p class="page-subtitle" id="invoicesSubtitle">Buat dan kelola invoice tagihan bulanan</p>
+          <div class="action-bar">
+            <div></div>
+            <button class="button primary" id="generateInvoiceBtn" onclick="openModal('invoiceForm')" style="display: none;">+ Buat Invoice</button>
+          </div>
+          <div class="panel">
+            <div class="panel-body" id="invoiceContainer">
+              <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Pilih penghuni untuk membuat invoice tagihan bulanan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <!-- Room Modal -->
+  <div id="roomModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="roomModalTitle">Tambah Kamar</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="roomForm" class="modal-body">
+        <div class="input-group">
+          <label>Nama Kamar</label>
+          <input type="text" name="name" placeholder="Contoh: Kamar A" required />
+        </div>
+        <div class="input-group">
+          <label>Jenis Kamar</label>
+          <select name="type" required>
+            <option value="">Pilih Jenis</option>
+            <option value="Kost">Kost</option>
+            <option value="Kontrakan">Kontrakan</option>
+            <option value="Studio">Studio</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Tarif Bulanan (Rp)</label>
+          <input type="number" name="rate" placeholder="1200000" min="0" required />
+        </div>
+        <div class="input-group">
+          <label>Status</label>
+          <select name="status" required>
+            <option value="Kosong">Kosong</option>
+            <option value="Terisi">Terisi</option>
+          </select>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button class="button secondary" onclick="closeModal()">Batal</button>
+        <button class="button primary" onclick="saveRoom()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resident Modal -->
+  <div id="residentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="residentModalTitle">Tambah Penghuni</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="residentForm" class="modal-body">
+        <div class="input-group">
+          <label>Nama Lengkap</label>
+          <input type="text" name="name" placeholder="Nama penghuni" required />
+        </div>
+        <div class="input-group">
+          <label>Kamar</label>
+          <select name="roomId" required>
+            <option value="">Pilih Kamar</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Nomor Kontak (WhatsApp/Telepon)</label>
+          <input type="tel" name="contact" placeholder="081234567890" />
+        </div>
+        <div class="input-group">
+          <label>Tanggal Masuk</label>
+          <input type="date" name="startDate" required />
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button class="button secondary" onclick="closeModal()">Batal</button>
+        <button class="button primary" onclick="saveResident()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Catat Pembayaran</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="paymentForm" class="modal-body">
+        <div class="input-group">
+          <label>Penghuni</label>
+          <select name="residentId" required>
+            <option value="">Pilih Penghuni</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Bulan</label>
+          <select name="month" required>
+            <option value="">Pilih Bulan</option>
+            <option value="Januari">Januari</option>
+            <option value="Februari">Februari</option>
+            <option value="Maret">Maret</option>
+            <option value="April">April</option>
+            <option value="Mei">Mei</option>
+            <option value="Juni">Juni</option>
+            <option value="Juli">Juli</option>
+            <option value="Agustus">Agustus</option>
+            <option value="September">September</option>
+            <option value="Oktober">Oktober</option>
+            <option value="November">November</option>
+            <option value="Desember">Desember</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Jumlah Pembayaran (Rp)</label>
+          <input type="number" name="amount" placeholder="1200000" min="0" required />
+        </div>
+        <div class="input-group">
+          <label>Status</label>
+          <select name="status" required>
+            <option value="Lunas">Lunas</option>
+            <option value="Belum Lunas">Belum Lunas</option>
+          </select>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button class="button secondary" onclick="closeModal()">Batal</button>
+        <button class="button primary" onclick="savePayment()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice Modal -->
+  <div id="invoiceModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Buat Invoice</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="invoiceForm" class="modal-body">
+        <div class="input-group">
+          <label>Penghuni</label>
+          <select name="residentId" required>
+            <option value="">Pilih Penghuni</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Bulan</label>
+          <select name="month" required>
+            <option value="">Pilih Bulan</option>
+            <option value="Januari">Januari</option>
+            <option value="Februari">Februari</option>
+            <option value="Maret">Maret</option>
+            <option value="April">April</option>
+            <option value="Mei">Mei</option>
+            <option value="Juni">Juni</option>
+            <option value="Juli">Juli</option>
+            <option value="Agustus">Agustus</option>
+            <option value="September">September</option>
+            <option value="Oktober">Oktober</option>
+            <option value="November">November</option>
+            <option value="Desember">Desember</option>
+          </select>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button class="button secondary" onclick="closeModal()">Batal</button>
+        <button class="button primary" onclick="generateAndDisplayInvoice()">Buat Invoice</button>
       </div>
     </div>
   </div>
 
   <script>
-    const initialRooms = [
+    // DATA STORE
+    let currentUser = null;
+    let editingId = null;
+    let currentModal = null;
+
+    let rooms = loadData('erpRooms', [
       { id: 1, name: 'Kamar A', type: 'Kost', rate: 1200000, status: 'Terisi' },
       { id: 2, name: 'Kamar B', type: 'Kost', rate: 1100000, status: 'Kosong' },
       { id: 3, name: 'Kamar C', type: 'Kontrakan', rate: 2100000, status: 'Terisi' },
       { id: 4, name: 'Kamar D', type: 'Studio', rate: 2500000, status: 'Kosong' }
-    ];
+    ]);
 
-    const initialResidents = [
-      { id: 1, name: 'Rian', roomId: 1, contact: '081234567890', startDate: '2025-11-01' },
-      { id: 2, name: 'Siti', roomId: 3, contact: '082233445566', startDate: '2025-12-15' }
-    ];
+    let residents = loadData('erpResidents', [
+      { id: 1, name: 'Risa Santoso', roomId: 1, contact: '081234567890', startDate: '2025-11-01' },
+      { id: 2, name: 'Budi Hermawan', roomId: 3, contact: '082233445566', startDate: '2025-12-15' }
+    ]);
 
-    const initialPayments = [
+    let payments = loadData('erpPayments', [
       { id: 1, residentId: 1, month: 'Mei', amount: 1200000, status: 'Lunas' },
       { id: 2, residentId: 2, month: 'Mei', amount: 2100000, status: 'Belum Lunas' }
-    ];
+    ]);
 
-    let rooms = loadData('erpRooms', initialRooms);
-    let residents = loadData('erpResidents', initialResidents);
-    let payments = loadData('erpPayments', initialPayments);
-    let currentTab = 'rooms';
-    let activeForm = '';
-    let editingId = null;
-
+    // UTILITY FUNCTIONS
     function loadData(key, defaultValue) {
       const raw = localStorage.getItem(key);
       if (!raw) {
@@ -637,29 +1092,106 @@
       localStorage.setItem(key, JSON.stringify(data));
     }
 
-    function activateTab(tab) {
-      currentTab = tab;
-      document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.id === `tab-${tab}`));
-      document.querySelectorAll('.panel').forEach(el => el.style.display = el.id === `panel-${tab}` ? 'block' : 'none');
-      renderAll();
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
     }
 
-    function renderAll() {
-      renderStats();
-      renderRooms();
-      renderResidents();
-      renderPayments();
-      renderInvoice();
+    // LOGIN SYSTEM
+    function selectRole(role) {
+      document.querySelectorAll('.role-option').forEach(el => el.classList.remove('active'));
+      document.querySelector(`[data-role="${role}"]`).classList.add('active');
+      document.getElementById('loginForm').dataset.role = role;
     }
 
-    function renderStats() {
-      const occupied = rooms.filter(item => item.status === 'Terisi').length;
-      const empty = rooms.filter(item => item.status === 'Kosong').length;
-      const dueCount = payments.filter(item => item.status === 'Belum Lunas').length;
-      document.getElementById('stat-empty').textContent = empty;
-      document.getElementById('stat-occupied').textContent = occupied;
-      document.getElementById('stat-residents').textContent = residents.length;
-      document.getElementById('stat-due').textContent = dueCount;
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const role = this.dataset.role || 'admin';
+      if (!email) {
+        alert('Masukkan email');
+        return;
+      }
+      currentUser = { email, role };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      initializeApp();
+    });
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('currentUser');
+      document.getElementById('appScreen').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('loginForm').reset();
+      selectRole('admin');
+    }
+
+    function initializeApp() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('appScreen').style.display = 'flex';
+      updateUserDisplay();
+      updateMenuVisibility();
+      updateDashboard();
+    }
+
+    function updateUserDisplay() {
+      document.getElementById('userDisplay').textContent = currentUser.email;
+      document.getElementById('roleDisplay').textContent = currentUser.role === 'admin' ? 'Administrator' : 'Penghuni';
+    }
+
+    function updateMenuVisibility() {
+      const isAdmin = currentUser.role === 'admin';
+      document.getElementById('menu-rooms').style.display = isAdmin ? 'list-item' : 'none';
+      document.getElementById('addResidentBtn').style.display = isAdmin ? 'block' : 'none';
+      document.getElementById('addPaymentBtn').style.display = isAdmin ? 'block' : 'none';
+      document.getElementById('generateInvoiceBtn').style.display = isAdmin ? 'block' : 'none';
+      document.getElementById('residentsActionHeader').style.display = isAdmin ? 'table-cell' : 'none';
+      document.getElementById('paymentsActionHeader').style.display = isAdmin ? 'table-cell' : 'none';
+    }
+
+    function navigateTo(page) {
+      document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+      document.querySelector(`[onclick="navigateTo('${page}')"]`).classList.add('active');
+      document.querySelectorAll('.page-view').forEach(el => el.style.display = 'none');
+      document.getElementById(`page-${page}`).style.display = 'block';
+      renderPage(page);
+    }
+
+    function renderPage(page) {
+      switch (page) {
+        case 'dashboard':
+          updateDashboard();
+          document.getElementById('pageTitle').textContent = 'Dashboard';
+          break;
+        case 'rooms':
+          renderRooms();
+          document.getElementById('pageTitle').textContent = 'Data Kamar';
+          break;
+        case 'residents':
+          renderResidents();
+          document.getElementById('pageTitle').textContent = 'Penghuni';
+          break;
+        case 'payments':
+          renderPayments();
+          document.getElementById('pageTitle').textContent = 'Pembayaran';
+          break;
+        case 'invoices':
+          renderInvoices();
+          document.getElementById('pageTitle').textContent = 'Invoice & Tagihan';
+          break;
+      }
+    }
+
+    function updateDashboard() {
+      const occupied = rooms.filter(r => r.status === 'Terisi').length;
+      const empty = rooms.filter(r => r.status === 'Kosong').length;
+      const unpaid = payments.filter(p => p.status === 'Belum Lunas').length;
+      const monthTotal = payments.reduce((sum, p) => sum + p.amount, 0);
+      document.getElementById('stat-total-rooms').textContent = rooms.length;
+      document.getElementById('stat-empty-rooms').textContent = empty;
+      document.getElementById('stat-occupied-rooms').textContent = occupied;
+      document.getElementById('stat-active-residents').textContent = residents.length;
+      document.getElementById('stat-this-month').textContent = formatCurrency(monthTotal);
+      document.getElementById('stat-unpaid').textContent = unpaid;
     }
 
     function renderRooms() {
@@ -668,15 +1200,16 @@
       rooms.forEach((room, index) => {
         const row = document.createElement('tr');
         const badgeClass = room.status === 'Terisi' ? 'occupied' : 'free';
+        const badgeText = room.status === 'Terisi' ? '🟢 Terisi' : '⭕ Kosong';
         row.innerHTML = `
           <td>${index + 1}</td>
-          <td>${room.name}</td>
+          <td><strong>${room.name}</strong></td>
           <td>${room.type}</td>
-          <td>Rp ${room.rate.toLocaleString()}</td>
-          <td><span class="badge ${badgeClass}">${room.status}</span></td>
+          <td>${formatCurrency(room.rate)}</td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
           <td>
-            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="editRoom(${room.id})">Edit</button>
-            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="deleteRoom(${room.id})">Hapus</button>
+            <button class="button secondary" onclick="editRoom(${room.id})">Edit</button>
+            <button class="button danger" onclick="deleteRoom(${room.id})">Hapus</button>
           </td>
         `;
         tbody.appendChild(row);
@@ -686,21 +1219,24 @@
     function renderResidents() {
       const tbody = document.querySelector('#residentsTable tbody');
       tbody.innerHTML = '';
-      residents.forEach((resident, index) => {
-        const room = rooms.find(r => r.id === resident.roomId) || { name: 'Tidak Ditemukan' };
+      const displayResidents = currentUser.role === 'user' ? residents.filter(r => r.id == currentUser.residentId) : residents;
+      displayResidents.forEach((resident, index) => {
+        const room = rooms.find(r => r.id === resident.roomId) || { name: '-' };
         const paymentStatus = calculateResidentPaymentStatus(resident.id);
         const badgeClass = paymentStatus === 'Lunas' ? 'paid' : 'due';
+        const badgeText = paymentStatus === 'Lunas' ? '✓ Lunas' : '⏳ Belum Lunas';
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${index + 1}</td>
-          <td>${resident.name}</td>
+          <td><strong>${resident.name}</strong></td>
           <td>${room.name}</td>
+          <td>${resident.contact || '-'}</td>
           <td>${resident.startDate}</td>
-          <td><span class="badge ${badgeClass}">${paymentStatus}</span></td>
-          <td>
-            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="editResident(${resident.id})">Edit</button>
-            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="deleteResident(${resident.id})">Hapus</button>
-          </td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+          ${currentUser.role === 'admin' ? `<td>
+            <button class="button secondary" onclick="editResident(${resident.id})">Edit</button>
+            <button class="button danger" onclick="deleteResident(${resident.id})">Hapus</button>
+          </td>` : ''}
         `;
         tbody.appendChild(row);
       });
@@ -709,25 +1245,32 @@
     function renderPayments() {
       const tbody = document.querySelector('#paymentsTable tbody');
       tbody.innerHTML = '';
-      payments.forEach((payment, index) => {
-        const resident = residents.find(r => r.id === payment.residentId) || { name: 'Penghuni tidak ditemukan', roomId: null };
+      const displayPayments = currentUser.role === 'user' ? payments.filter(p => p.residentId == currentUser.residentId) : payments;
+      displayPayments.forEach((payment, index) => {
+        const resident = residents.find(r => r.id === payment.residentId) || { name: '-' };
         const room = rooms.find(r => r.id === resident.roomId) || { name: '-' };
         const badgeClass = payment.status === 'Lunas' ? 'paid' : 'due';
+        const badgeText = payment.status === 'Lunas' ? '✓ Lunas' : '⏳ Belum Lunas';
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${index + 1}</td>
-          <td>${resident.name}</td>
+          <td><strong>${resident.name}</strong></td>
           <td>${room.name}</td>
           <td>${payment.month}</td>
-          <td>Rp ${payment.amount.toLocaleString()}</td>
-          <td><span class="badge ${badgeClass}">${payment.status}</span></td>
-          <td>
-            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="togglePaymentStatus(${payment.id})">Tandai</button>
-            <button class="button secondary" style="padding:0.55rem 0.8rem;" onclick="deletePayment(${payment.id})">Hapus</button>
-          </td>
+          <td>${formatCurrency(payment.amount)}</td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+          ${currentUser.role === 'admin' ? `<td>
+            <button class="button secondary" onclick="togglePaymentStatus(${payment.id})">Toggle</button>
+            <button class="button danger" onclick="deletePayment(${payment.id})">Hapus</button>
+          </td>` : ''}
         `;
         tbody.appendChild(row);
       });
+    }
+
+    function renderInvoices() {
+      // Placeholder for invoice summary
+      document.getElementById('invoiceContainer').innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">Pilih penghuni dan bulan untuk membuat invoice tagihan bulanan.</p>';
     }
 
     function calculateResidentPaymentStatus(residentId) {
@@ -736,48 +1279,34 @@
       return residentPayments.some(p => p.status === 'Belum Lunas') ? 'Belum Lunas' : 'Lunas';
     }
 
-    function openForm(type) {
-      activeForm = type;
-      editingId = null;
-      const modal = document.getElementById('modal');
-      modal.style.display = 'flex';
-      document.getElementById('resourceForm').reset();
-      const roomFields = document.getElementById('roomFields');
-      const residentFields = document.getElementById('residentFields');
-      const paymentFields = document.getElementById('paymentFields');
-      roomFields.style.display = 'none';
-      residentFields.style.display = 'none';
-      paymentFields.style.display = 'none';
-      if (type === 'newRoom' || type === 'editRoom') {
-        document.getElementById('modalTitle').textContent = type === 'editRoom' ? 'Edit Data Kamar' : 'Tambah Kamar';
-        roomFields.style.display = 'grid';
-      }
-      if (type === 'newResident' || type === 'editResident') {
-        document.getElementById('modalTitle').textContent = type === 'editResident' ? 'Edit Penghuni' : 'Tambah Penghuni';
-        residentFields.style.display = 'grid';
+    // MODAL FUNCTIONS
+    function openModal(form) {
+      if (form === 'roomForm') {
+        document.getElementById('roomModal').classList.add('open');
+        currentModal = 'roomModal';
+      } else if (form === 'residentForm') {
         fillRoomSelect();
-      }
-      if (type === 'newPayment') {
-        document.getElementById('modalTitle').textContent = 'Tambah Pembayaran';
-        paymentFields.style.display = 'grid';
+        document.getElementById('residentModal').classList.add('open');
+        currentModal = 'residentModal';
+      } else if (form === 'paymentForm') {
         fillResidentSelect();
-      }
-      if (type === 'editPayment') {
-        document.getElementById('modalTitle').textContent = 'Edit Pembayaran';
-        paymentFields.style.display = 'grid';
-        fillResidentSelect();
-      }
-      if (type === 'newRoom') {
-        document.querySelector('#roomFields input[name="name"]').focus();
-      }
-      if (type === 'newResident') {
-        document.querySelector('#residentFields input[name="name"]').focus();
+        document.getElementById('paymentModal').classList.add('open');
+        currentModal = 'paymentModal';
+      } else if (form === 'invoiceForm') {
+        fillResidentSelectForInvoice();
+        document.getElementById('invoiceModal').classList.add('open');
+        currentModal = 'invoiceModal';
       }
     }
 
+    function closeModal() {
+      document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
+      currentModal = null;
+    }
+
     function fillRoomSelect() {
-      const select = document.querySelector('#residentFields select[name="room"]');
-      select.innerHTML = '';
+      const select = document.querySelector('#residentForm select[name="roomId"]');
+      select.innerHTML = '<option value="">Pilih Kamar</option>';
       rooms.forEach(room => {
         const option = document.createElement('option');
         option.value = room.id;
@@ -787,163 +1316,229 @@
     }
 
     function fillResidentSelect() {
-      const select = document.querySelector('#paymentFields select[name="resident"]');
-      select.innerHTML = '';
+      const select = document.querySelector('#paymentForm select[name="residentId"]');
+      select.innerHTML = '<option value="">Pilih Penghuni</option>';
       residents.forEach(resident => {
         const option = document.createElement('option');
         option.value = resident.id;
-        const room = rooms.find(r => r.id === resident.roomId);
-        option.textContent = `${resident.name} - ${room ? room.name : 'Tidak ada kamar'}`;
+        option.textContent = resident.name;
         select.appendChild(option);
       });
     }
 
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
+    function fillResidentSelectForInvoice() {
+      const select = document.querySelector('#invoiceForm select[name="residentId"]');
+      select.innerHTML = '<option value="">Pilih Penghuni</option>';
+      residents.forEach(resident => {
+        const option = document.createElement('option');
+        option.value = resident.id;
+        option.textContent = resident.name;
+        select.appendChild(option);
+      });
     }
 
-    document.getElementById('resourceForm').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const form = event.target;
-      if (activeForm === 'newRoom' || activeForm === 'editRoom') {
-        const name = form.querySelector('input[name="name"]').value.trim();
-        const type = form.querySelector('select[name="type"]').value;
-        const rate = Number(form.querySelector('input[name="rate"]').value);
-        const status = form.querySelector('select[name="status"]').value;
-        if (!name || !rate) return;
-        if (editingId) {
-          const room = rooms.find(item => item.id === editingId);
-          room.name = name;
-          room.type = type;
-          room.rate = rate;
-          room.status = status;
-        } else {
-          rooms.push({ id: Date.now(), name, type, rate, status });
-        }
-        saveData('erpRooms', rooms);
+    function saveRoom() {
+      const form = document.getElementById('roomForm');
+      const name = form.querySelector('input[name="name"]').value.trim();
+      const type = form.querySelector('select[name="type"]').value;
+      const rate = Number(form.querySelector('input[name="rate"]').value);
+      const status = form.querySelector('select[name="status"]').value;
+      if (!name || !type || !rate) {
+        alert('Lengkapi semua field');
+        return;
       }
-      if (activeForm === 'newResident' || activeForm === 'editResident') {
-        const name = form.querySelector('#residentFields input[name="name"]').value.trim();
-        const roomId = Number(form.querySelector('#residentFields select[name="room"]').value);
-        const contact = form.querySelector('#residentFields input[name="contact"]').value.trim();
-        const startDate = form.querySelector('#residentFields input[name="startDate"]').value;
-        if (!name || !roomId || !startDate) return;
-        if (editingId) {
-          const resident = residents.find(item => item.id === editingId);
-          resident.name = name;
-          resident.roomId = roomId;
-          resident.contact = contact;
-          resident.startDate = startDate;
-        } else {
-          residents.push({ id: Date.now(), name, roomId, contact, startDate });
-        }
-        saveData('erpResidents', residents);
+      if (editingId) {
+        const room = rooms.find(r => r.id === editingId);
+        room.name = name;
+        room.type = type;
+        room.rate = rate;
+        room.status = status;
+      } else {
+        rooms.push({ id: Date.now(), name, type, rate, status });
       }
-      if (activeForm === 'newPayment' || activeForm === 'editPayment') {
-        const residentId = Number(form.querySelector('#paymentFields select[name="resident"]').value);
-        const month = form.querySelector('#paymentFields select[name="month"]').value;
-        const amount = Number(form.querySelector('#paymentFields input[name="amount"]').value);
-        const status = form.querySelector('#paymentFields select[name="status"]').value;
-        if (!residentId || !month || !amount) return;
-        if (editingId) {
-          const payment = payments.find(item => item.id === editingId);
-          payment.residentId = residentId;
-          payment.month = month;
-          payment.amount = amount;
-          payment.status = status;
-        } else {
-          payments.push({ id: Date.now(), residentId, month, amount, status });
-        }
-        saveData('erpPayments', payments);
-      }
+      saveData('erpRooms', rooms);
       closeModal();
-      renderAll();
-    });
+      editingId = null;
+      renderRooms();
+    }
+
+    function saveResident() {
+      const form = document.getElementById('residentForm');
+      const name = form.querySelector('input[name="name"]').value.trim();
+      const roomId = Number(form.querySelector('select[name="roomId"]').value);
+      const contact = form.querySelector('input[name="contact"]').value.trim();
+      const startDate = form.querySelector('input[name="startDate"]').value;
+      if (!name || !roomId || !startDate) {
+        alert('Lengkapi semua field wajib');
+        return;
+      }
+      if (editingId) {
+        const resident = residents.find(r => r.id === editingId);
+        resident.name = name;
+        resident.roomId = roomId;
+        resident.contact = contact;
+        resident.startDate = startDate;
+      } else {
+        residents.push({ id: Date.now(), name, roomId, contact, startDate });
+      }
+      saveData('erpResidents', residents);
+      closeModal();
+      editingId = null;
+      renderResidents();
+    }
+
+    function savePayment() {
+      const form = document.getElementById('paymentForm');
+      const residentId = Number(form.querySelector('select[name="residentId"]').value);
+      const month = form.querySelector('select[name="month"]').value;
+      const amount = Number(form.querySelector('input[name="amount"]').value);
+      const status = form.querySelector('select[name="status"]').value;
+      if (!residentId || !month || !amount) {
+        alert('Lengkapi semua field');
+        return;
+      }
+      if (editingId) {
+        const payment = payments.find(p => p.id === editingId);
+        payment.residentId = residentId;
+        payment.month = month;
+        payment.amount = amount;
+        payment.status = status;
+      } else {
+        payments.push({ id: Date.now(), residentId, month, amount, status });
+      }
+      saveData('erpPayments', payments);
+      closeModal();
+      editingId = null;
+      renderPayments();
+    }
+
+    function generateAndDisplayInvoice() {
+      const form = document.getElementById('invoiceForm');
+      const residentId = Number(form.querySelector('select[name="residentId"]').value);
+      const month = form.querySelector('select[name="month"]').value;
+      if (!residentId || !month) {
+        alert('Pilih penghuni dan bulan');
+        return;
+      }
+      const resident = residents.find(r => r.id === residentId);
+      const room = rooms.find(r => r.id === resident.roomId);
+      const payment = payments.find(p => p.residentId === residentId && p.month === month);
+      const invoiceHTML = `
+        <div style="background: white; padding: 2rem; border-radius: 12px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">KostaHub</div>
+            <div style="color: var(--text-secondary);">INVOICE TAGIHAN BULANAN</div>
+          </div>
+          <div style="border-top: 2px solid var(--border); border-bottom: 2px solid var(--border); padding: 1.5rem 0; margin-bottom: 1.5rem;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div><strong>Nama Penghuni:</strong><br>${resident.name}</div>
+              <div><strong>Kontak:</strong><br>${resident.contact}</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div><strong>Kamar:</strong><br>${room.name} (${room.type})</div>
+              <div><strong>Tanggal Masuk:</strong><br>${resident.startDate}</div>
+            </div>
+          </div>
+          <div style="margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span><strong>Bulan Tagihan:</strong></span>
+              <span>${month}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span><strong>Tarif Bulanan:</strong></span>
+              <span>${formatCurrency(room.rate)}</span>
+            </div>
+          </div>
+          <div style="background: var(--primary); color: white; padding: 1.5rem; border-radius: 8px; text-align: right;">
+            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">TOTAL TAGIHAN</div>
+            <div style="font-size: 2rem; font-weight: 700;">${formatCurrency(room.rate)}</div>
+          </div>
+          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+              <strong>Status Pembayaran:</strong> ${payment ? (payment.status === 'Lunas' ? '✓ LUNAS' : '⏳ BELUM LUNAS') : '📋 BELUM DICATAT'}<br>
+              <strong>Tanggal Invoice:</strong> ${new Date().toLocaleDateString('id-ID')}<br>
+              <br>Silakan transfer ke rekening yang telah disediakan.<br>Terima kasih atas pembayaran Anda.
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('invoiceContainer').innerHTML = invoiceHTML;
+      closeModal();
+    }
 
     function editRoom(id) {
-      const room = rooms.find(item => item.id === id);
-      if (!room) return;
+      const room = rooms.find(r => r.id === id);
       editingId = id;
-      activeForm = 'editRoom';
-      openForm('editRoom');
-      const form = document.getElementById('resourceForm');
-      form.querySelector('input[name="name"]').value = room.name;
-      form.querySelector('select[name="type"]').value = room.type;
-      form.querySelector('input[name="rate"]').value = room.rate;
-      form.querySelector('select[name="status"]').value = room.status;
+      document.getElementById('roomModalTitle').textContent = 'Edit Kamar';
+      document.getElementById('roomForm').querySelector('input[name="name"]').value = room.name;
+      document.getElementById('roomForm').querySelector('select[name="type"]').value = room.type;
+      document.getElementById('roomForm').querySelector('input[name="rate"]').value = room.rate;
+      document.getElementById('roomForm').querySelector('select[name="status"]').value = room.status;
+      openModal('roomForm');
     }
 
     function deleteRoom(id) {
-      if (!confirm('Hapus kamar ini? Semua data penghuni dan pembayaran terkait juga akan terpengaruh.')) return;
-      rooms = rooms.filter(room => room.id !== id);
-      residents = residents.filter(resident => resident.roomId !== id);
-      payments = payments.filter(payment => residents.some(r => r.id === payment.residentId));
+      if (!confirm('Hapus kamar ini?')) return;
+      rooms = rooms.filter(r => r.id !== id);
+      residents = residents.filter(r => r.roomId !== id);
       saveData('erpRooms', rooms);
       saveData('erpResidents', residents);
-      saveData('erpPayments', payments);
-      renderAll();
+      renderRooms();
     }
 
     function editResident(id) {
-      const resident = residents.find(item => item.id === id);
-      if (!resident) return;
+      const resident = residents.find(r => r.id === id);
       editingId = id;
-      activeForm = 'editResident';
-      openForm('editResident');
-      const form = document.getElementById('resourceForm');
-      form.querySelector('#residentFields input[name="name"]').value = resident.name;
-      form.querySelector('#residentFields select[name="room"]').value = resident.roomId;
-      form.querySelector('#residentFields input[name="contact"]').value = resident.contact;
-      form.querySelector('#residentFields input[name="startDate"]').value = resident.startDate;
+      document.getElementById('residentModalTitle').textContent = 'Edit Penghuni';
+      fillRoomSelect();
+      document.getElementById('residentForm').querySelector('input[name="name"]').value = resident.name;
+      document.getElementById('residentForm').querySelector('select[name="roomId"]').value = resident.roomId;
+      document.getElementById('residentForm').querySelector('input[name="contact"]').value = resident.contact;
+      document.getElementById('residentForm').querySelector('input[name="startDate"]').value = resident.startDate;
+      openModal('residentForm');
     }
 
     function deleteResident(id) {
-      if (!confirm('Hapus penghuni ini? Data pembayaran terkait juga akan dihapus.')) return;
-      residents = residents.filter(resident => resident.id !== id);
-      payments = payments.filter(payment => payment.residentId !== id);
+      if (!confirm('Hapus penghuni ini?')) return;
+      residents = residents.filter(r => r.id !== id);
+      payments = payments.filter(p => p.residentId !== id);
       saveData('erpResidents', residents);
       saveData('erpPayments', payments);
-      renderAll();
+      renderResidents();
     }
 
     function deletePayment(id) {
       if (!confirm('Hapus data pembayaran ini?')) return;
-      payments = payments.filter(payment => payment.id !== id);
+      payments = payments.filter(p => p.id !== id);
       saveData('erpPayments', payments);
-      renderAll();
+      renderPayments();
     }
 
     function togglePaymentStatus(id) {
-      const payment = payments.find(item => item.id === id);
-      if (!payment) return;
+      const payment = payments.find(p => p.id === id);
       payment.status = payment.status === 'Lunas' ? 'Belum Lunas' : 'Lunas';
       saveData('erpPayments', payments);
-      renderAll();
+      renderPayments();
     }
 
-    function generateInvoice() {
-      const latest = payments[payments.length - 1];
-      if (!latest) {
-        document.getElementById('invoicePreview').textContent = 'Tambahkan pembayaran terlebih dahulu untuk membuat invoice.';
-        return;
+    // INIT
+    window.addEventListener('load', function () {
+      const saved = localStorage.getItem('currentUser');
+      if (saved) {
+        try {
+          currentUser = JSON.parse(saved);
+          initializeApp();
+        } catch (e) {
+          console.error('Failed to load user:', e);
+        }
       }
-      const resident = residents.find(r => r.id === latest.residentId) || {};
-      const room = rooms.find(r => r.id === resident.roomId) || {};
-      const total = latest.amount;
-      const invoiceText = `INVOICE KOST / KONTRAKAN\n\nNama Penghuni: ${resident.name || 'Tidak Ditemukan'}\nKamar: ${room.name || '-'}\nJenis: ${room.type || '-'}\nBulan Tagihan: ${latest.month}\nJumlah Tagihan: Rp ${total.toLocaleString()}\nStatus: ${latest.status}\n\nTerima kasih atas pembayaran Anda.\n
-Silakan simpan atau screenshot invoice ini sebagai bukti.`;
-      document.getElementById('invoicePreview').textContent = invoiceText;
-    }
+    });
 
-    function renderInvoice() {
-      const duePayments = payments.filter(p => p.status === 'Belum Lunas');
-      const summary = duePayments.length
-        ? `Tagihan belum terbayar: ${duePayments.length} item. Silakan pilih pembayaran terbaru untuk buat invoice.`
-        : 'Semua pembayaran sudah lunas. Tambahkan tagihan bila diperlukan.';
-      document.getElementById('invoicePreview').textContent = summary;
-    }
-
-    renderAll();
+    document.addEventListener('click', function (event) {
+      if (event.target.id === 'roomModal' || event.target.id === 'residentModal' || event.target.id === 'paymentModal' || event.target.id === 'invoiceModal') {
+        closeModal();
+      }
+    });
   </script>
 </body>
 </html>
